@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import jsonPlaceholder from '../apis/jsonPlaceholder';
 
 // Action creators
@@ -28,7 +30,7 @@ export const fetchPosts = () => async dispatch =>  {
 	});
 };
 
-export const fetchUsers = (id) => async dispatch =>  {
+/* export const fetchUsers = (id) => async dispatch =>  {
 	const response = await jsonPlaceholder.get(`/users/${id}`);
 
 	// Dispatching action
@@ -36,4 +38,20 @@ export const fetchUsers = (id) => async dispatch =>  {
 		type: 'FETCH_USERS',
 		payload: response.data
 	});
+}; */
+
+
+
+export const fetchUser = (id) => dispatch =>  {
+	_fetchUser(id, dispatch);
 };
+
+const _fetchUser = _.memoize( async (id, dispatch) =>  {
+	const response = await jsonPlaceholder.get(`/users/${id}`);
+
+	// Dispatching action
+	dispatch ({
+		type: 'FETCH_USERS',
+		payload: response.data
+	});
+});
