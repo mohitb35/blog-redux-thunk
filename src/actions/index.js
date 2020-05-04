@@ -63,8 +63,24 @@ export const fetchPostsAndUsers = () => async (dispatch, getState) => {
 	// Get list of posts
 	const posts = getState().posts;
 
-	//const userIds = _.uniq(_.map(posts, 'userId'));
+	/*
+	const userIds = _.uniq(_.map(posts, 'userId'));
+	userIds.forEach(id => {
+		dispatch(fetchUser(id));
+	})
+	*/
 	//Using lodash, map unique user IDs
+
+	// lodash + chaining
+	/* 
+	_.chain(getState().posts)
+		.map('userId')
+		.uniq()
+		.forEach(id => {
+			dispatch(fetchUser(id));
+		})
+		.value();
+	*/
 
 	// Using map and reduce, get unique user IDs
 	/* const userIds = posts.map(post => post.userId).reduce(function(unique, id){
