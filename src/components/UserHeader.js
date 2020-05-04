@@ -10,7 +10,7 @@ class UserHeader extends React.Component {
 	}
 
 	render() {
-		const user = this.props.users.find((user) => user.id === this.props.userId);
+		const { user } = this.props;
 
 		if(user){
 			return (
@@ -23,8 +23,14 @@ class UserHeader extends React.Component {
 	}
 }
 
-const mapStateToProps = (state) => {
-	return { users: state.users };
+const mapStateToProps = (state, ownProps) => {
+	// return { users: state.users };
+
+	// refactor to move user filtering logic to mapStateToProps, so that only a single user is passed as prop. 
+	// To access user Id, we introduce ownProps which is the second argument to mapStateToProps
+	return {
+		user: state.users.find((user) => user.id === ownProps.userId)
+	};
 };
 
 export default connect(
