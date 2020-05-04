@@ -1,4 +1,4 @@
-import _ from 'lodash';
+// import _ from 'lodash';
 
 import jsonPlaceholder from '../apis/jsonPlaceholder';
 
@@ -30,7 +30,7 @@ export const fetchPosts = () => async dispatch =>  {
 	});
 };
 
-/* export const fetchUsers = (id) => async dispatch =>  {
+export const fetchUser = (id) => async dispatch =>  {
 	const response = await jsonPlaceholder.get(`/users/${id}`);
 
 	// Dispatching action
@@ -38,11 +38,11 @@ export const fetchPosts = () => async dispatch =>  {
 		type: 'FETCH_USERS',
 		payload: response.data
 	});
-}; */
+};
 
 
-
-export const fetchUser = (id) => dispatch =>  {
+// Memoized solution
+/* export const fetchUser = (id) => dispatch =>  {
 	_fetchUser(id, dispatch);
 };
 
@@ -54,4 +54,31 @@ const _fetchUser = _.memoize( async (id, dispatch) =>  {
 		type: 'FETCH_USERS',
 		payload: response.data
 	});
-});
+}); */
+
+export const fetchPostsAndUsers = () => async (dispatch, getState) => {
+	// Call fetchPosts
+	await dispatch(fetchPosts());
+
+	// Get list of posts
+	const posts = getState().posts;
+
+	//const userIds = _.uniq(_.map(posts, 'userId'));
+	//Using lodash, map unique user IDs
+
+	// Using map and reduce, get unique user IDs
+	/* const userIds = posts.map(post => post.userId).reduce(function(unique, id){
+		if(!unique.includes(id)){
+			unique.push(id);
+		}
+		return unique;
+	},[]); */
+
+	// Using map and Set, get unique user IDs
+	const userIds = [...new Set(posts.map(post => post.userId))];
+	
+	// get details for each user
+	userIds.forEach(id => {
+		dispatch(fetchUser(id));
+	})
+}
